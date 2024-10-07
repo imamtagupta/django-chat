@@ -23,4 +23,6 @@ urlpatterns = [
     # path('', view=index),
     path('chat/', view=base),
     path('chat/<str:room_name>/', view=room, name='room'),
+    path('users/', view=get_users, name="list_of_user"),
+    path('user/')
 ]

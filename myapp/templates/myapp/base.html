@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enter Chat Room</title>
+</head>
+<body>
+    <h1>Welcome to the Chat App</h1>
+
+    <!-- Simple input form to enter a chat room name -->
+    <label for="roomName">Enter a room name:</label>
+    <input id="roomName" type="text" placeholder="Room name" required>
+    <button id="goRoom">Go to Room</button>
+
+    <script>
+        document.getElementById('goRoom').onclick = function() {
+            const roomName = document.getElementById('roomName').value.trim();
+            if (roomName) {
+                // Redirect to the room URL dynamically using JavaScript
+                window.location.href = `/chat/${roomName}/`;
+            } else {
+                alert("Please enter a valid room name.");
+            }
+        };
+    </script>
+</body>
+</html>

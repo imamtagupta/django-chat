@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+</head>
+<body>
+    <h1>Room: <span id="room-name"></span></h1>
+    
+    <!-- Message Input and Button -->
+    <div>
+        <input id="messageInput" type="text" placeholder="Type a message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <!-- Chat Messages Display -->
+    <div id="chat-log" style="border: 1px solid black; height: 300px; overflow-y: scroll; padding: 10px;">
+    </div>
+
+    <script>
+        // Get room name from the URL (from window location)
+        const roomName = window.location.pathname.split('/').slice(-2, -1)[0];
+        document.getElementById('room-name').innerText = roomName;
+
+        // Create WebSocket connection to room
+        const chatSocket = new WebSocket(
+            `ws://${window.location.host}/ws/chat/${roomName}/`
+        );
+
+        // Receive message from WebSocket and display in chat log
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            const chatLog = document.getElementById('chat-log');
+            chatLog.innerHTML += `<p>${data.message}</p>`;
+        };
+
+        // Send message to WebSocket server
+        function sendMessage() {
+            const inputElement = document.getElementById('messageInput');
+            const message = inputElement.value;
+            chatSocket.send(JSON.stringify({ 'message': message }));
+            inputElement.value = '';  // Clear the input after sending
+        }
+
+        // Handle WebSocket errors (optional)
+        chatSocket.onerror = function(e) {
+            console.error('WebSocket error observed:', e);
+        };
+    </script>
+</body>
+</html>
